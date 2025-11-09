@@ -1,7 +1,6 @@
-// pages/api/login.js
 export default function handler(req, res) {
   const client_id = process.env.SPOTIFY_CLIENT_ID;
-  const redirect_uri = process.env.REDIRECT_URI; // contoh: https://your-vercel-app.vercel.app/api/callback
+  const redirect_uri = process.env.REDIRECT_URI;
   const scope = [
     'streaming',
     'user-read-email',
