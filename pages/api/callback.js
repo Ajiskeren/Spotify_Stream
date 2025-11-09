@@ -1,4 +1,3 @@
-// pages/api/callback.js
 import fetch from 'node-fetch';
 
 export default async function handler(req, res) {
@@ -30,14 +29,11 @@ export default async function handler(req, res) {
     return res.status(500).json(tokenData);
   }
 
-  // Simpel: simpan refresh_token & access_token di cookie (demo)
-  // Untuk produksi, simpan refresh_token di DB yang aman.
   const expires = new Date(Date.now() + tokenData.expires_in * 1000).toUTCString();
   res.setHeader('Set-Cookie', [
     `spotify_access_token=${tokenData.access_token}; Expires=${expires}; Path=/; HttpOnly=false; SameSite=Lax`,
-    `spotify_refresh_token=${tokenData.refresh_token}; Path=/; HttpOnly=true; SameSite=Lax` // httpOnly untuk refresh token
+    `spotify_refresh_token=${tokenData.refresh_token}; Path=/; HttpOnly=true; SameSite=Lax`
   ]);
 
-  // Redirect ke halaman utama
   res.redirect('/');
 }
