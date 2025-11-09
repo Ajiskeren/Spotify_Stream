@@ -1,11 +1,10 @@
-// pages/api/token.js
 import fetch from 'node-fetch';
 
 function parseCookies(cookieHeader = '') {
   return Object.fromEntries(
     cookieHeader.split(';').map(c => c.trim()).filter(Boolean).map(s => {
       const idx = s.indexOf('=');
-      return [s.substring(0, idx), s.substring(idx+1)];
+      return [s.substring(0, idx), s.substring(idx + 1)];
     })
   );
 }
@@ -17,7 +16,6 @@ export default async function handler(req, res) {
   const client_id = process.env.SPOTIFY_CLIENT_ID;
   const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 
-  // Jika tidak ada atau expired (opsi: coba refresh selalu), lakukan refresh
   if (!access_token && refresh_token) {
     const body = new URLSearchParams({
       grant_type: 'refresh_token',
@@ -38,7 +36,6 @@ export default async function handler(req, res) {
 
     access_token = tokenData.access_token;
     const expires = new Date(Date.now() + tokenData.expires_in * 1000).toUTCString();
-    // update cookie (non-httpOnly so frontend dapat baca token jika mau)
     res.setHeader('Set-Cookie', `spotify_access_token=${access_token}; Expires=${expires}; Path=/; HttpOnly=false; SameSite=Lax`);
     return res.json({ access_token, expires_in: tokenData.expires_in });
   }
